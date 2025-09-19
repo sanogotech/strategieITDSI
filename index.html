@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stratégie IT DSI - Distribution d'Eau et d'Électricité en Afrique</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e74c3c;
+      --water-blue: #3498db;
+      --energy-orange: #e67e22;
+      --light-bg: #f8f9fa;
+      --dark-bg: #343a40;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      background-color: var(--primary-color);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      color: white;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--water-blue) 50%, var(--energy-orange) 100%);
+      color: white;
+      padding: 4rem 0;
+      margin-bottom: 3rem;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .card-header {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+    }
+
+    .module-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--secondary-color);
+    }
+
+    .btn-primary {
+      background-color: var(--water-blue);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #2980b9;
+    }
+
+    .btn-energy {
+      background-color: var(--energy-orange);
+      color: white;
+    }
+
+    .btn-energy:hover {
+      background-color: #d35400;
+      color: white;
+    }
+
+    .btn-outline-primary {
+      color: var(--water-blue);
+      border-color: var(--water-blue);
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--water-blue);
+      color: white;
+    }
+
+    .strategy-container {
+      background-color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .process-step {
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 20px;
+    }
+
+    .process-step:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      background-color: var(--water-blue);
+      border-radius: 50%;
+    }
+
+    .process-step:after {
+      content: "";
+      position: absolute;
+      left: 9px;
+      top: 20px;
+      width: 2px;
+      height: 100%;
+      background-color: var(--water-blue);
+    }
+
+    .process-step:last-child:after {
+      display: none;
+    }
+
+    .data-table {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .data-table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .highlight-box {
+      background-color: rgba(52, 152, 219, 0.1);
+      border-left: 4px solid var(--water-blue);
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0 5px 5px 0;
+    }
+
+    .energy-highlight {
+      background-color: rgba(230, 126, 34, 0.1);
+      border-left: 4px solid var(--energy-orange);
+    }
+
+    .linked-modules {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .linked-module {
+      background-color: var(--light-bg);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--primary-color);
+      border: 1px solid #ddd;
+    }
+
+    .tab-content {
+      padding: 1.5rem 0;
+    }
+
+    .roadmap-container {
+      position: relative;
+      padding: 2rem 0;
+      overflow-x: auto;
+    }
+
+    .roadmap {
+      display: flex;
+      min-width: 800px;
+    }
+
+    .roadmap-year {
+      min-width: 150px;
+      padding: 1rem;
+      text-align: center;
+      border-right: 1px solid #ddd;
+    }
+
+    .roadmap-milestone {
+      background-color: var(--water-blue);
+      color: white;
+      padding: 0.5rem;
+      border-radius: 5px;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .energy-milestone {
+      background-color: var(--energy-orange);
+    }
+
+    footer {
+      background-color: var(--dark-bg);
+      color: white;
+      padding: 2rem 0;
+      margin-top: 3rem;
+    }
+
+    /* Animation pour les cartes */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .module-card {
+      animation: fadeIn 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    /* Délai d'animation pour chaque carte */
+    .module-card:nth-child(1) { animation-delay: 0.1s; }
+    .module-card:nth-child(2) { animation-delay: 0.2s; }
+    .module-card:nth-child(3) { animation-delay: 0.3s; }
+    .module-card:nth-child(4) { animation-delay: 0.4s; }
+    .module-card:nth-child(5) { animation-delay: 0.5s; }
+    .module-card:nth-child(6) { animation-delay: 0.6s; }
+    .module-card:nth-child(7) { animation-delay: 0.7s; }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 2rem 0;
+      }
+
+      .module-icon {
+        font-size: 1.5rem;
+      }
+    }
+
+    .swot-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .swot-item {
+      padding: 1rem;
+      border-radius: 5px;
+    }
+
+    .swot-strengths {
+      background-color: rgba(46, 204, 113, 0.1);
+      border: 1px solid rgba(46, 204, 113, 0.5);
+    }
+
+    .swot-weaknesses {
+      background-color: rgba(231, 76, 60, 0.1);
+      border: 1px solid rgba(231, 76, 60, 0.5);
+    }
+
+    .swot-opportunities {
+      background-color: rgba(52, 152, 219, 0.1);
+      border: 1px solid rgba(52, 152, 219, 0.5);
+    }
+
+    .swot-threats {
+      background-color: rgba(241, 196, 15, 0.1);
+      border: 1px solid rgba(241, 196, 15, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="bi bi-lightning-charge me-2"></i>Stratégie IT DSI - Eau & Électricité Afrique
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#introduction">Introduction</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#concepts">Concepts clés</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#vision">Vision & Objectifs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#analyse">Analyse</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#decisions">Décisions & Priorités</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#execution">Exécution</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#bonnes-pratiques">Bonnes pratiques</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <div class="container text-center">
+      <h1 class="display-4 fw-bold mb-3">Stratégie IT d'une DSI pour la Distribution d'Eau et d'Électricité en Afrique</h1>
+      <p class="lead mb-4">Découvrez les bonnes pratiques, étapes clés et retours d'expérience pour une transformation digitale réussie</p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="#introduction" class="btn btn-light btn-lg px-4">Commencer l'exploration</a>
+        <a href="#bonnes-pratiques" class="btn btn-outline-light btn-lg px-4">Voir les bonnes pratiques</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container mb-5">
+    <section id="introduction" class="mb-5">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <h2 class="text-center mb-4">Introduction générale</h2>
+          <div class="strategy-container">
+            <p>Dans le contexte africain, marqué par :</p>
+            <ul>
+              <li>une <strong>forte croissance démographique</strong>,</li>
+              <li>une <strong>urbanisation accélérée</strong>,</li>
+              <li>une <strong>pression sur les ressources en eau et en énergie</strong>,</li>
+              <li>une <strong>attente sociétale forte de fiabilité et de transparence</strong>,</li>
+              <li>une <strong>évolution technologique rapide</strong> (mobile money, cloud, IoT, IA).</li>
+            </ul>
+            
+            <div class="highlight-box">
+              <p>La DSI d'un grand groupe de distribution d'eau et d'électricité n'est plus un simple <strong>centre de support technique</strong>. Elle devient :</p>
+              <ul>
+                <li>un <strong>acteur stratégique</strong> de la continuité de service public,</li>
+                <li>un <strong>catalyseur de transformation digitale</strong>,</li>
+                <li>un <strong>rempart de cybersécurité</strong> face aux menaces croissantes,</li>
+                <li>un <strong>accélérateur d'inclusion sociale et numérique</strong>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="concepts" class="mb-5">
+      <h2 class="text-center mb-4">Concepts clés appliqués au SI</h2>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-eye me-2"></i>
+              <h5 class="mb-0">Vision</h5>
+            </div>
+            <div class="card-body">
+              <p>Construire un système d'information <strong>moderne, agile, sécurisé et durable</strong>, capable de :</p>
+              <ul>
+                <li>soutenir les métiers (production, distribution, facturation, recouvrement),</li>
+                <li>améliorer la qualité de service client,</li>
+                <li>favoriser l'innovation inclusive adaptée aux réalités africaines.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-bullseye me-2"></i>
+              <h5 class="mb-0">Objectifs SMART</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Réduire de <strong>60 % les interruptions SI critiques</strong> en 5 ans.</li>
+                <li>Atteindre <strong>85 % de clients digitaux</strong> d'ici 2030 (paiement mobile, appli, portail client).</li>
+                <li>Migrer <strong>70 % des applications stratégiques vers un cloud hybride</strong> d'ici 2028.</li>
+                <li>Réduire de <strong>40 % les pertes commerciales</strong> (fraudes, erreurs de facturation) grâce à l'IT d'ici 2030.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-clipboard-data me-2"></i>
+              <h5 class="mb-0">Analyse SWOT IT</h5>
+            </div>
+            <div class="card-body">
+              <div class="swot-container">
+                <div class="swot-item swot-strengths">
+                  <h6>Forces</h6>
+                  <ul>
+                    <li>Base clients massive</li>
+                    <li>Projets pilotes IoT</li>
+                    <li>Soutien gouvernemental</li>
+                  </ul>
+                </div>
+                <div class="swot-item swot-weaknesses">
+                  <h6>Faiblesses</h6>
+                  <ul>
+                    <li>Dépendance aux systèmes legacy</li>
+                    <li>Faible culture cybersécurité</li>
+                    <li>Manque de talents cloud/DevOps</li>
+                  </ul>
+                </div>
+                <div class="swot-item swot-opportunities">
+                  <h6>Opportunités</h6>
+                  <ul>
+                    <li>Explosion du mobile money</li>
+                    <li>Financements internationaux (BAD, BM)</li>
+                    <li>Adoption IA/IoT</li>
+                  </ul>
+                </div>
+                <div class="swot-item swot-threats">
+                  <h6>Menaces</h6>
+                  <ul>
+                    <li>Cyberattaques</li>
+                    <li>Obsolescence matérielle</li>
+                    <li>Inflation sur les équipements</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-graph-up me-2"></i>
+              <h5 class="mb-0">KPI stratégiques</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Infrastructure :</strong> disponibilité > 99,95 %, MTTR < 4h</li>
+                <li class="list-group-item"><strong>Clients :</strong> satisfaction (NPS) > 70, taux facturation digitale > 85 %</li>
+                <li class="list-group-item"><strong>Sécurité :</strong> 0 incident majeur non maîtrisé, conformité ISO 27001</li>
+                <li class="list-group-item"><strong>RH :</strong> 80 % équipes certifiées cloud, DevSecOps et cybersécurité</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="vision" class="mb-5">
+      <h2 class="text-center mb-4">Vision et Objectifs IT</h2>
+      
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-eye me-2"></i>
+              <h5 class="mb-0">Vision 2035</h5>
+            </div>
+            <div class="card-body text-center">
+              <blockquote class="blockquote">
+                <p>"Une DSI leader en Afrique, sécurisée, résiliente, inclusive et innovante, garantissant une gestion intelligente et durable de l'eau et de l'électricité."</p>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-diagram-3 me-2"></i>
+              <h5 class="mb-0">Axes stratégiques</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="bi bi-building fs-1 mb-2 text-primary"></i>
+                      <h6>Gouvernance IT et organisation</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="bi bi-shield-lock fs-1 mb-2 text-primary"></i>
+                      <h6>Cybersécurité et résilience opérationnelle</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="bi bi-phone fs-1 mb-2 text-primary"></i>
+                      <h6>Digitalisation client et expérience usager</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="bi bi-gear fs-1 mb-2 text-primary"></i>
+                      <h6>Modernisation des systèmes legacy et API Management</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="bi bi-lightbulb fs-1 mb-2 text-primary"></i>
+                      <h6>Innovation (IA, IoT, blockchain, RPA)</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="bi bi-people fs-1 mb-2 text-primary"></i>
+                      <h6>Capital humain et compétences</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="bi bi-handshake fs-1 mb-2 text-primary"></i>
+                      <h6>Partenariats stratégiques et écosystème</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="bi bi-tree fs-1 mb-2 text-primary"></i>
+                      <h6>Green IT et durabilité</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-binoculars me-2"></i>
+              <h5 class="mb-0">Scénarios prospectifs</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="card">
+                    <div class="card-header bg-success text-white text-center">
+                      <h6 class="mb-0">Optimiste</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Adoption massive du digital, 90 % clients digitaux, smart metering généralisé.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card">
+                    <div class="card-header bg-warning text-dark text-center">
+                      <h6 class="mb-0">Réaliste</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Progression progressive, hybridation cloud, montée en puissance de l'IA.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card">
+                    <div class="card-header bg-danger text-white text-center">
+                      <h6 class="mb-0">Pessimiste</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Cyberattaques critiques, adoption digitale lente, sous-financement récurrent.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="analyse" class="mb-5">
+      <h2 class="text-center mb-4">Analyse de l'environnement IT</h2>
+      
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-clipboard2-data me-2"></i>
+              <h5 class="mb-0">Analyse PESTEL</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-header bg-primary text-white text-center">
+                      <h6 class="mb-0">Politique</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Réformes énergétiques, exigences régulateurs.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-header bg-primary text-white text-center">
+                      <h6 class="mb-0">Économique</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Inflation, coût matériel importé, budgets limités.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-header bg-primary text-white text-center">
+                      <h6 class="mb-0">Social</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Forte demande de transparence et de fiabilité du service.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-header bg-primary text-white text-center">
+                      <h6 class="mb-0">Technologique</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Essor 5G, IoT, IA, mobile money.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-header bg-primary text-white text-center">
+                      <h6 class="mb-0">Environnemental</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Pression sur ressources, transition énergétique.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-header bg-primary text-white text-center">
+                      <h6 class="mb-0">Légal</h6>
+                    </div>
+                    <div class="card-body">
+                      <p>Protection des données, alignement sur RGPD.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center bg-success text-white">
+              <i class="bi bi-lightbulb me-2"></i>
+              <h5 class="mb-0">Opportunités</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li><strong>IoT</strong> → réduire fuites d'eau et pertes non techniques</li>
+                <li><strong>Mobile money</strong> → recouvrement rapide et inclusif</li>
+                <li><strong>RPA/IA</strong> → automatiser facturation et RH</li>
+                <li><strong>Cloud</strong> → scalabilité et optimisation coûts</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center bg-danger text-white">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <h5 class="mb-0">Menaces</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Attaques sur SCADA et infrastructures critiques</li>
+                <li>Dépendance à des fournisseurs étrangers</li>
+                <li>Obsolescence rapide du matériel</li>
+                <li>Pénurie de talents spécialisés</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflexion" class="mb-5">
+      <h2 class="text-center mb-4">Réflexion critique et créative</h2>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-chat-square-text me-2"></i>
+              <h5 class="mb-0">Questions stratégiques</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Comment digitaliser sans exclure les zones rurales ?</li>
+                <li>Quels processus automatiser pour un ROI rapide ?</li>
+                <li>Comment sécuriser un SI fragmenté et hétérogène ?</li>
+                <li>Comment former et fidéliser les talents IT dans un marché concurrentiel ?</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-check-circle me-2"></i>
+              <h5 class="mb-0">Apprentissages passés</h5>
+            </div>
+            <div class="card-body">
+              <div class="energy-highlight highlight-box">
+                <p><strong>Succès USSD 2019</strong> - Forte adoption clients ruraux grâce à la simplicité d'utilisation</p>
+              </div>
+              <div class="highlight-box" style="border-left-color: #e74c3c;">
+                <p><strong>Échec CRM 2015</strong> - Manque d'adhésion métiers et formation insuffisante</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-tools me-2"></i>
+              <h5 class="mb-0">Outils d'innovation</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Hackathons internes</li>
+                <li>Labs d'innovation avec startups locales</li>
+                <li>Partenariats universités (IA, cybersécurité)</li>
+                <li>Programmes de co-création avec clients</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="decisions" class="mb-5">
+      <h2 class="text-center mb-4">Décisions et Priorités IT</h2>
+      
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-flag me-2"></i>
+              <h5 class="mb-0">Priorités 2025–2035</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <i class="bi bi-shield-lock fs-1 mb-2 text-primary"></i>
+                      <h6>Cybersécurité</h6>
+                      <p>SOC, IAM, DevSecOps, certification ISO 27001</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <i class="bi bi-phone fs-1 mb-2 text-primary"></i>
+                      <h6>Digitalisation client</h6>
+                      <p>USSD, mobile app, portail, chatbot IA</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <i class="bi bi-speedometer2 fs-1 mb-2 text-primary"></i>
+                      <h6>Smart metering</h6>
+                      <p>Déploiement massif de compteurs intelligents IoT</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <i class="bi bi-puzzle fs-1 mb-2 text-primary"></i>
+                      <h6>API Management</h6>
+                      <p>Intégration et ouverture des systèmes</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <i class="bi bi-cloud fs-1 mb-2 text-primary"></i>
+                      <h6>Cloud hybride</h6>
+                      <p>Hébergement SI critique, optimisation OPEX</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                    <div class="card-body text-center">
+                      <i class="bi bi-cpu fs-1 mb-2 text-primary"></i>
+                      <h6>IA et Analytics</h6>
+                      <p>Maintenance prédictive, prévisions de consommation</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-map me-2"></i>
+              <h5 class="mb-0">Roadmap 2025–2035</h5>
+            </div>
+            <div class="card-body">
+              <div class="roadmap-container">
+                <div class="roadmap">
+                  <div class="roadmap-year">
+                    <h5>2025</h5>
+                    <div class="roadmap-milestone">Généralisation paiement mobile</div>
+                    <div class="roadmap-milestone">SOC opérationnel</div>
+                  </div>
+                  <div class="roadmap-year">
+                    <h5>2026</h5>
+                    <div class="roadmap-milestone">Migration ERP vers cloud</div>
+                    <div class="roadmap-milestone">POC smart grid</div>
+                  </div>
+                  <div class="roadmap-year">
+                    <h5>2027</h5>
+                    <div class="roadmap-milestone">API Management</div>
+                    <div class="roadmap-milestone">Déploiement IoT</div>
+                  </div>
+                  <div class="roadmap-year">
+                    <h5>2028</h5>
+                    <div class="roadmap-milestone">IA pour maintenance prédictive</div>
+                    <div class="roadmap-milestone">50% clients digitaux</div>
+                  </div>
+                  <div class="roadmap-year">
+                    <h5>2030</h5>
+                    <div class="roadmap-milestone">70% cloud hybride</div>
+                    <div class="roadmap-milestone">Blockchain pour transactions</div>
+                  </div>
+                  <div class="roadmap-year">
+                    <h5>2035</h5>
+                    <div class="roadmap-milestone">Smart grid généralisé</div>
+                    <div class="roadmap-milestone">85% clients digitaux</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="execution" class="mb-5">
+      <h2 class="text-center mb-4">Exécution et Mise en œuvre</h2>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-kanban me-2"></i>
+              <h5 class="mb-0">Méthodologie</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Agile/Scrum</strong> pour les projets digitaux</li>
+                <li><strong>ITIL</strong> pour la gestion des services</li>
+                <li><strong>DevOps/DevSecOps</strong> pour le développement</li>
+                <li><strong>Waterfall</strong> pour les projets d'infrastructure</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-currency-exchange me-2"></i>
+              <h5 class="mb-0">Financement</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Budget CAPEX/OPEX équilibré</li>
+                <li>Financements BAD et BM</li>
+                <li>Partenariats public-privé</li>
+                <li>Fonds innovation dédié</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-clipboard-check me-2"></i>
+              <h5 class="mb-0">Suivi et pilotage</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Comité de pilotage stratégique trimestriel</li>
+                <li>Tableaux de bord en temps réel (KPI)</li>
+                <li>Audits réguliers et certifications</li>
+                <li>Benchmarking avec pairs africains</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bonnes-pratiques" class="mb-5">
+      <h2 class="text-center mb-4">Bonnes pratiques et Retours d'expérience</h2>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center bg-success text-white">
+              <i class="bi bi-check-circle me-2"></i>
+              <h5 class="mb-0">Ce qui a marché</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Paiement USSD → adoption massive</li>
+                <li>Partenariats avec fintechs locales</li>
+                <li>Formation terrain intensive</li>
+                <li>Pilotage par la valeur métier</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center bg-danger text-white">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <h5 class="mb-0">Échecs à éviter</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Implémentation CRM sans accompagnement métier</li>
+                <li>Projets trop ambitieux sans MVP</li>
+                <li>Négliger la cybersécurité en phase initiale</li>
+                <li>Sous-estimer la résistance au changement</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <i class="bi bi-lightbulb me-2"></i>
+              <h5 class="mb-0">Recommandations</h5>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>Impliquer les métiers dès la conception</li>
+                <li>Privilégier l'approche incrémentale</li>
+                <li>Investir dans la formation et le change management</li>
+                <li>Adopter une approche "Security by Design"</li>
+                <li>Penser inclusif (zones rurales, personnes âgées)</li>
+                <li>Construire un écosystème de partenaires locaux</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-4 mb-md-0">
+          <h5>Stratégie IT DSI - Distribution d'Eau et d'Électricité en Afrique</h5>
+          <p>Un guide complet pour la transformation digitale du secteur des utilities en Afrique.</p>
+        </div>
+        <div class="col-md-3 mb-4 mb-md-0">
+          <h5>Liens rapides</h5>
+          <ul class="list-unstyled">
+            <li><a href="#introduction" class="text-white">Introduction</a></li>
+            <li><a href="#vision" class="text-white">Vision</a></li>
+            <li><a href="#bonnes-pratiques" class="text-white">Bonnes pratiques</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li><i class="bi bi-envelope me-2"></i> contact@dsi-afrique-utilities.com</li>
+            <li><i class="bi bi-telephone me-2"></i> +221 33 800 00 00</li>
+            <li><i class="bi bi-geo-alt me-2"></i> Dakar, Sénégal</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4 bg-light">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0">&copy; 2025 DSI Utilities Afrique. Tous droits réservés.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Animation de défilement fluide
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Animation des cartes au défilement
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.module-card').forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      observer.observe(card);
+    });
+
+    // Fonctionnalité d'onglets pour les modules liés
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabTriggers = document.querySelectorAll('[data-bs-toggle="tab"]');
+      tabTriggers.forEach(trigger => {
+        trigger.addEventListener('shown.bs.tab', function(event) {
+          const target = document.querySelector(event.target.getAttribute('data-bs-target'));
+          const cards = target.querySelectorAll('.module-card');
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, 100 * index);
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

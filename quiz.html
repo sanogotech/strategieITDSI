@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz : Stratégie IT d'une DSI</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --scrum-orange: #ff7f2a;
+            --agile-blue: #4d8af0;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --white-color: #ffffff;
+            --grey-text: #7f8c8d;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+            padding-top: 2rem;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: auto;
+            background-color: var(--white-color);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .quiz-header h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .quiz-header p {
+            text-align: center;
+            color: var(--grey-text);
+            margin-bottom: 2rem;
+        }
+
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+
+        #question-counter {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        #question-card {
+            border: none;
+            border-radius: 10px;
+            padding: 2rem;
+            background-color: #fdfdfd;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        #question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 2px solid #ecf0f1;
+            background-color: var(--white-color);
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover:not([disabled]) {
+            border-color: var(--scrum-orange);
+            background-color: #fff9f5;
+        }
+        
+        .option-btn.correct {
+            background-color: #e9f7ef;
+            border-color: var(--success-color);
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fdeded;
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+            font-weight: 600;
+        }
+
+        #explanation-box {
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        #explanation-box h5 {
+            font-weight: 700;
+        }
+
+        .explanation-correct {
+             background-color: #e9f7ef;
+             border-left: 5px solid var(--success-color);
+        }
+
+        .explanation-incorrect {
+            background-color: #fdeded;
+            border-left: 5px solid var(--danger-color);
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+        }
+
+        /* Modal styling */
+        .modal-header {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        .modal-title-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+        
+        .final-score {
+            font-size: 3.5rem;
+            font-weight: 700;
+        }
+        
+        .score-text {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1><i class="fas fa-microchip" style="color:var(--agile-blue);"></i> Quiz : Stratégie IT d'une DSI</h1>
+                <p>Testez vos connaissances sur la stratégie IT d'un grand groupe de distribution d’eau et d’électricité en Afrique.</p>
+            </div>
+
+            <div class="progress-container">
+                 <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span id="question-counter">Question 1 / 50</span>
+                    <span id="current-score">Score: 0</span>
+                 </div>
+                <div class="progress" style="height: 10px;">
+                    <div id="progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 2.5%;" aria-valuenow="2.5" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+
+            <div id="question-card" class="card">
+                <div class="card-body">
+                    <h2 id="question-text">Chargement de la question...</h2>
+                    <div id="options-container">
+                        </div>
+                    <div id="explanation-box" class="d-none">
+                        <h5 id="explanation-title"></h5>
+                        <p id="explanation-text"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-navigation">
+                <button id="prev-btn" class="btn btn-outline-secondary nav-btn" disabled><i class="fas fa-arrow-left"></i> Précédent</button>
+                <button id="next-btn" class="btn btn-primary nav-btn">Suivant <i class="fas fa-arrow-right"></i></button>
+                <button id="finish-btn" class="btn btn-success nav-btn d-none">Terminer & Voir les Résultats</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="resultsModal" tabindex="-1" aria-labelledby="resultsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resultsModalLabel"><i class="fas fa-trophy modal-title-icon"></i>Résultats du Quiz</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <h4 class="score-text">Votre score final est :</h4>
+                    <p class="final-score" id="final-score-percentage">0%</p>
+                    <p class="text-muted fs-5">
+                        <span id="final-score-correct">0</span> sur 
+                        <span id="final-score-total">0</span> bonnes réponses
+                    </p>
+                    <hr>
+                    <div id="final-recommendations"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="restart-quiz-btn"><i class="fas fa-redo"></i> Recommencer le quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const quizData = {
+            questions: [
+                {
+                    question: "1. Quel est l’objectif principal de la stratégie IT d’une DSI dans un groupe de distribution d’eau et d’électricité ?",
+                    options: [
+                      "A. Suivre les tendances technologiques",
+                      "B. Aligner l’IT sur la stratégie métier et optimiser les services",
+                      "C. Installer le maximum de serveurs",
+                      "D. Réduire le budget informatique"
+                    ],
+                    correctAnswer: "B. Aligner l’IT sur la stratégie métier et optimiser les services",
+                    explanation: "L’objectif clé est d’aligner l’IT sur les objectifs métier pour améliorer l’efficacité, la performance et la satisfaction client."
+                  },
+                  {
+                    question: "2. Pourquoi une DSI doit-elle avoir une architecture IT intégrée ?",
+                    options: [
+                      "A. Pour réduire les coûts",
+                      "B. Pour faciliter la maintenance et l’intégration des systèmes",
+                      "C. Pour utiliser des technologies obsolètes",
+                      "D. Pour éviter la cybersécurité"
+                    ],
+                    correctAnswer: "B. Pour faciliter la maintenance et l’intégration des systèmes",
+                    explanation: "Une architecture intégrée permet une meilleure communication entre applications, facilite l’évolution et réduit les risques techniques."
+                  },
+                  {
+                    question: "3. Que signifie ‘Digitalisation des processus métier’ ?",
+                    options: [
+                      "A. Remplacer les employés par des robots",
+                      "B. Automatiser et améliorer les processus métier avec des solutions digitales",
+                      "C. Suivre les tendances numériques",
+                      "D. Installer plus de serveurs"
+                    ],
+                    correctAnswer: "B. Automatiser et améliorer les processus métier avec des solutions digitales",
+                    explanation: "La digitalisation consiste à utiliser les technologies pour rendre les processus plus efficaces, rapides et fiables."
+                  },
+                  {
+                    question: "4. Quel est le rôle de la cybersécurité dans la stratégie IT ?",
+                    options: [
+                      "A. Protéger les systèmes et les données contre les attaques et pertes",
+                      "B. Augmenter les coûts",
+                      "C. Empêcher l’accès à tous les employés",
+                      "D. Remplacer les audits"
+                    ],
+                    correctAnswer: "A. Protéger les systèmes et les données contre les attaques et pertes",
+                    explanation: "La cybersécurité garantit la continuité des services et la protection des informations sensibles."
+                  },
+                  {
+                    question: "5. Pourquoi l’urbanisation du SI est-elle importante ?",
+                    options: [
+                      "A. Pour organiser et standardiser les applications et données",
+                      "B. Pour décorer les bureaux",
+                      "C. Pour créer des projets inutiles",
+                      "D. Pour remplacer l’architecture physique"
+                    ],
+                    correctAnswer: "A. Pour organiser et standardiser les applications et données",
+                    explanation: "L’urbanisation permet de structurer les systèmes, réduire les redondances et faciliter l’évolution des applications."
+                  },
+                  {
+                    question: "6. Quel est le rôle des KPI dans la stratégie IT ?",
+                    options: [
+                      "A. Mesurer la performance et guider les décisions",
+                      "B. Créer des tableaux inutiles",
+                      "C. Suivre les modes technologiques",
+                      "D. Impressionner la direction"
+                    ],
+                    correctAnswer: "A. Mesurer la performance et guider les décisions",
+                    explanation: "Les KPI permettent d’évaluer l’efficacité des projets IT et d’ajuster la stratégie pour atteindre les objectifs métier."
+                  },
+                  {
+                    question: "7. Pourquoi la DSI doit-elle gérer les risques IT ?",
+                    options: [
+                      "A. Pour respecter la loi uniquement",
+                      "B. Pour prévenir les incidents, cyberattaques et interruptions de service",
+                      "C. Pour ralentir les projets",
+                      "D. Pour éviter les audits"
+                    ],
+                    correctAnswer: "B. Pour prévenir les incidents, cyberattaques et interruptions de service",
+                    explanation: "La gestion des risques réduit les interruptions et les pertes financières tout en sécurisant les données."
+                  },
+                  {
+                    question: "8. Que signifie ‘Alignement IT-Métier’ ?",
+                    options: [
+                      "A. Prioriser les projets IT selon la direction",
+                      "B. Adapter les solutions IT pour soutenir les objectifs métiers",
+                      "C. Installer des technologies innovantes sans plan",
+                      "D. Ignorer les besoins métier"
+                    ],
+                    correctAnswer: "B. Adapter les solutions IT pour soutenir les objectifs métiers",
+                    explanation: "L’alignement garantit que chaque projet IT contribue directement aux objectifs stratégiques du groupe."
+                  },
+                  {
+                    question: "9. Pourquoi l’innovation technologique est-elle stratégique pour une DSI ?",
+                    options: [
+                      "A. Pour suivre les tendances numériques",
+                      "B. Pour améliorer l’efficacité, l’expérience client et créer un avantage compétitif",
+                      "C. Pour remplacer les employés",
+                      "D. Pour dépenser le budget"
+                    ],
+                    correctAnswer: "B. Pour améliorer l’efficacité, l’expérience client et créer un avantage compétitif",
+                    explanation: "L’innovation permet de proposer des services plus performants, sécurisés et adaptés aux besoins des clients."
+                  },
+                  {
+                    question: "10. Que signifie ‘Plan de continuité IT’ ?",
+                    options: [
+                      "A. Prévoir la reprise des activités IT après un incident",
+                      "B. Installer des serveurs supplémentaires",
+                      "C. Créer un manuel d’utilisation",
+                      "D. Ignorer les interruptions"
+                    ],
+                    correctAnswer: "A. Prévoir la reprise des activités IT après un incident",
+                    explanation: "Le plan de continuité assure que les services critiques restent disponibles malgré les incidents ou sinistres."
+                  },
+                    {
+                    question: "11. Quelle est la première étape pour bâtir une stratégie IT dans une DSI ?",
+                    options: [
+                      "A. Acheter des logiciels coûteux",
+                      "B. Comprendre la stratégie métier et les priorités de l’entreprise",
+                      "C. Installer de nouveaux serveurs",
+                      "D. Recruter plus d’informaticiens"
+                    ],
+                    correctAnswer: "B. Comprendre la stratégie métier et les priorités de l’entreprise",
+                    explanation: "Une stratégie IT commence toujours par l’alignement avec la stratégie métier et les besoins du terrain."
+                  },
+                  {
+                    question: "12. Que signifie ‘Urbanisation du SI’ ?",
+                    options: [
+                      "A. Réaménager les bureaux de la DSI",
+                      "B. Structurer et organiser les applications pour plus de cohérence",
+                      "C. Remplacer les réseaux électriques",
+                      "D. Réduire les budgets"
+                    ],
+                    correctAnswer: "B. Structurer et organiser les applications pour plus de cohérence",
+                    explanation: "L’urbanisation du SI permet d’avoir une vision claire, d’éviter les doublons et de favoriser l’intégration."
+                  },
+                  {
+                    question: "13. Quel est l’un des défis majeurs d’une DSI en Afrique ?",
+                    options: [
+                      "A. La disponibilité de l’électricité et de l’internet",
+                      "B. Le recrutement de développeurs en Europe",
+                      "C. Le manque d’espaces de bureaux",
+                      "D. L’excès de financement"
+                    ],
+                    correctAnswer: "A. La disponibilité de l’électricité et de l’internet",
+                    explanation: "La fiabilité des infrastructures reste un défi important qui impacte la continuité de service IT."
+                  },
+                  {
+                    question: "14. Quel est l’avantage principal d’une solution open source dans une DSI africaine ?",
+                    options: [
+                      "A. Elle est gratuite et ne demande aucun effort",
+                      "B. Elle permet flexibilité, réduction des coûts et indépendance technologique",
+                      "C. Elle bloque l’innovation",
+                      "D. Elle est toujours moins performante"
+                    ],
+                    correctAnswer: "B. Elle permet flexibilité, réduction des coûts et indépendance technologique",
+                    explanation: "L’open source permet d’adapter les solutions localement tout en réduisant la dépendance aux éditeurs étrangers."
+                  },
+                  {
+                    question: "15. Que signifie DevSecOps ?",
+                    options: [
+                      "A. Une méthode de sécurité militaire",
+                      "B. Une intégration de développement, sécurité et opérations",
+                      "C. Une nouvelle version du DevOps",
+                      "D. Une certification ISO"
+                    ],
+                    correctAnswer: "B. Une intégration de développement, sécurité et opérations",
+                    explanation: "DevSecOps consiste à intégrer la sécurité dès la phase de développement et tout au long du cycle de vie applicatif."
+                  },
+                  {
+                    question: "16. Pourquoi un plan de continuité IT est-il vital pour une DSI d’électricité ?",
+                    options: [
+                      "A. Parce que les clients veulent des promotions",
+                      "B. Parce que l’électricité doit être disponible 24/7",
+                      "C. Parce que le cloud coûte cher",
+                      "D. Parce que les serveurs sont vieux"
+                    ],
+                    correctAnswer: "B. Parce que l’électricité doit être disponible 24/7",
+                    explanation: "Un plan de continuité permet de garantir un approvisionnement constant en électricité et en eau en cas d’incident IT."
+                  },
+                  {
+                    question: "17. Qu’apporte un API Manager dans la stratégie IT ?",
+                    options: [
+                      "A. Gérer et sécuriser les échanges entre applications",
+                      "B. Remplacer les développeurs",
+                      "C. Décorer l’infrastructure",
+                      "D. Réduire les bases de données"
+                    ],
+                    correctAnswer: "A. Gérer et sécuriser les échanges entre applications",
+                    explanation: "L’API Manager permet de contrôler les flux, renforcer la sécurité et faciliter l’intégration des services."
+                  },
+                  {
+                    question: "18. Pourquoi le Cloud hybride est souvent privilégié par une DSI africaine ?",
+                    options: [
+                      "A. Parce qu’il est plus cher",
+                      "B. Parce qu’il combine sécurité locale et agilité du cloud public",
+                      "C. Parce qu’il remplace l’électricité",
+                      "D. Parce qu’il supprime les sauvegardes"
+                    ],
+                    correctAnswer: "B. Parce qu’il combine sécurité locale et agilité du cloud public",
+                    explanation: "Le cloud hybride concilie souveraineté des données et flexibilité des services à la demande."
+                  },
+                  {
+                    question: "19. Quelle est la meilleure approche pour réduire les cyberattaques ?",
+                    options: [
+                      "A. Former les utilisateurs et renforcer la sécurité",
+                      "B. Ignorer les menaces",
+                      "C. Acheter plus de serveurs",
+                      "D. Couper l’accès internet"
+                    ],
+                    correctAnswer: "A. Former les utilisateurs et renforcer la sécurité",
+                    explanation: "La sensibilisation, la sécurité proactive et les outils adaptés réduisent fortement les risques."
+                  },
+                  {
+                    question: "20. Quel est l’intérêt d’un tableau de bord pour une DSI ?",
+                    options: [
+                      "A. Suivre les KPI et prendre des décisions éclairées",
+                      "B. Décorer les présentations",
+                      "C. Créer plus de complexité",
+                      "D. Remplacer les réunions"
+                    ],
+                    correctAnswer: "A. Suivre les KPI et prendre des décisions éclairées",
+                    explanation: "Les tableaux de bord permettent de piloter la performance et d’ajuster la stratégie en temps réel."
+                  },
+                  {
+                    question: "21. Qu’est-ce que l’IoT apporte à une société de distribution d’eau et d’électricité ?",
+                    options: [
+                      "A. Une perte d’énergie",
+                      "B. Un suivi intelligent des compteurs et infrastructures",
+                      "C. Plus de serveurs",
+                      "D. Une diminution des clients"
+                    ],
+                    correctAnswer: "B. Un suivi intelligent des compteurs et infrastructures",
+                    explanation: "L’IoT permet de gérer les compteurs intelligents, détecter les pannes et optimiser la consommation."
+                  },
+                  {
+                    question: "22. Quel est le risque si une DSI n’a pas de gouvernance IT claire ?",
+                    options: [
+                      "A. Une baisse de productivité et une perte d’alignement",
+                      "B. Plus d’innovation",
+                      "C. Moins de cyberattaques",
+                      "D. Réduction des coûts"
+                    ],
+                    correctAnswer: "A. Une baisse de productivité et une perte d’alignement",
+                    explanation: "Sans gouvernance, la DSI risque de multiplier les projets incohérents et coûteux."
+                  },
+                  {
+                    question: "23. Quelle norme internationale est clé pour la sécurité de l’information ?",
+                    options: [
+                      "A. ISO 9001",
+                      "B. ISO/IEC 27001",
+                      "C. ISO 45001",
+                      "D. ITIL"
+                    ],
+                    correctAnswer: "B. ISO/IEC 27001",
+                    explanation: "La norme ISO/IEC 27001 est une référence mondiale en matière de sécurité de l’information."
+                  },
+                  {
+                    question: "24. Quelle est la mission principale d’un ERP dans une DSI ?",
+                    options: [
+                      "A. Gérer les finances, RH, logistique et facturation dans un système intégré",
+                      "B. Remplacer le réseau électrique",
+                      "C. Supprimer les données",
+                      "D. Servir uniquement pour la paie"
+                    ],
+                    correctAnswer: "A. Gérer les finances, RH, logistique et facturation dans un système intégré",
+                    explanation: "Un ERP centralise et intègre les processus clés de l’entreprise pour améliorer l’efficacité."
+                  },
+                  {
+                    question: "25. Quel est le rôle de l’ITIL dans une DSI ?",
+                    options: [
+                      "A. Gérer les services IT selon des bonnes pratiques",
+                      "B. Former uniquement les managers",
+                      "C. Remplacer les normes ISO",
+                      "D. Définir la stratégie marketing"
+                    ],
+                    correctAnswer: "A. Gérer les services IT selon des bonnes pratiques",
+                    explanation: "ITIL aide à structurer les processus de gestion des services IT pour une meilleure qualité et fiabilité."
+                  },
+                  {
+                    question: "26. Quel est l’impact des coupures électriques sur une stratégie IT ?",
+                    options: [
+                      "A. Aucun",
+                      "B. Risque de perte de données et interruption des services",
+                      "C. Plus de productivité",
+                      "D. Réduction du budget"
+                    ],
+                    correctAnswer: "B. Risque de perte de données et interruption des services",
+                    explanation: "Les coupures électriques sont critiques et nécessitent des solutions de sauvegarde et redondance."
+                  },
+                  {
+                    question: "27. Quelle est l’importance de la formation continue des équipes IT ?",
+                    options: [
+                      "A. Garder les compétences à jour face aux évolutions technologiques",
+                      "B. Faire plaisir aux employés",
+                      "C. Réduire les budgets",
+                      "D. Décorer le CV"
+                    ],
+                    correctAnswer: "A. Garder les compétences à jour face aux évolutions technologiques",
+                    explanation: "Les technologies évoluent vite, former régulièrement le personnel est vital pour rester compétitif."
+                  },
+                  {
+                    question: "28. Quelle est la valeur ajoutée d’un MDM (Meter Data Management) ?",
+                    options: [
+                      "A. Stocker les emails",
+                      "B. Gérer, analyser et valoriser les données des compteurs intelligents",
+                      "C. Supprimer les serveurs",
+                      "D. Réduire le nombre de clients"
+                    ],
+                    correctAnswer: "B. Gérer, analyser et valoriser les données des compteurs intelligents",
+                    explanation: "Un MDM optimise la gestion des données issues des compteurs et améliore la facturation et la planification."
+                  },
+                  {
+                    question: "29. Pourquoi le Big Data est-il stratégique dans la distribution d’eau et d’électricité ?",
+                    options: [
+                      "A. Parce qu’il est à la mode",
+                      "B. Parce qu’il permet d’anticiper la demande, détecter les fraudes et optimiser les réseaux",
+                      "C. Parce qu’il réduit le nombre de clients",
+                      "D. Parce qu’il remplace les ERP"
+                    ],
+                    correctAnswer: "B. Parce qu’il permet d’anticiper la demande, détecter les fraudes et optimiser les réseaux",
+                    explanation: "Le Big Data donne une meilleure visibilité et aide à prendre des décisions basées sur les données."
+                  },
+                  {
+                    question: "30. Que signifie SSO (Single Sign-On) ?",
+                    options: [
+                      "A. Une seule authentification pour accéder à plusieurs applications",
+                      "B. Supprimer les mots de passe",
+                      "C. Un nouveau type de serveur",
+                      "D. Une réduction des coûts"
+                    ],
+                    correctAnswer: "A. Une seule authentification pour accéder à plusieurs applications",
+                    explanation: "Le SSO simplifie l’accès des utilisateurs en leur permettant d’utiliser une seule connexion."
+                  },
+                  {
+                    question: "31. Quelle est la première étape d’une analyse SWOT IT ?",
+                    options: [
+                      "A. Identifier les forces et faiblesses internes",
+                      "B. Lancer un projet cloud",
+                      "C. Acheter un logiciel",
+                      "D. Recruter un consultant"
+                    ],
+                    correctAnswer: "A. Identifier les forces et faiblesses internes",
+                    explanation: "La SWOT commence par une analyse interne des points forts et points faibles de la DSI."
+                  },
+                  {
+                    question: "32. Pourquoi la DSI doit-elle gérer un portefeuille de projets ?",
+                    options: [
+                      "A. Pour prioriser et maximiser la valeur des projets IT",
+                      "B. Pour ralentir les livraisons",
+                      "C. Pour dépenser plus",
+                      "D. Pour décorer la stratégie"
+                    ],
+                    correctAnswer: "A. Pour prioriser et maximiser la valeur des projets IT",
+                    explanation: "La gestion de portefeuille permet de concentrer les ressources sur les projets à fort impact stratégique."
+                  },
+                  {
+                    question: "33. Quelle est la différence entre cloud privé et cloud public ?",
+                    options: [
+                      "A. Le privé est interne et contrôlé, le public est partagé et externe",
+                      "B. Le privé est gratuit",
+                      "C. Le public ne nécessite pas internet",
+                      "D. Aucun"
+                    ],
+                    correctAnswer: "A. Le privé est interne et contrôlé, le public est partagé et externe",
+                    explanation: "Le cloud privé assure le contrôle et la sécurité, tandis que le cloud public offre flexibilité et coût réduit."
+                  },
+                  {
+                    question: "34. Pourquoi une stratégie API-first est-elle importante ?",
+                    options: [
+                      "A. Parce qu’elle augmente les coûts",
+                      "B. Parce qu’elle permet de rendre les services accessibles et intégrables facilement",
+                      "C. Parce qu’elle bloque les partenaires",
+                      "D. Parce qu’elle supprime la sécurité"
+                    ],
+                    correctAnswer: "B. Parce qu’elle permet de rendre les services accessibles et intégrables facilement",
+                    explanation: "API-first permet d’ouvrir l’écosystème et d’accélérer l’innovation avec des partenaires."
+                  },
+                  {
+                    question: "35. Que signifie ‘Legacy System’ ?",
+                    options: [
+                      "A. Système informatique ancien mais encore utilisé",
+                      "B. Nouvelle génération de logiciel",
+                      "C. Cloud moderne",
+                      "D. Données temporaires"
+                    ],
+                    correctAnswer: "A. Système informatique ancien mais encore utilisé",
+                    explanation: "Un Legacy System est un ancien système souvent difficile à intégrer mais critique pour le métier."
+                  },
+                  {
+                    question: "36. Quelle est l’importance d’une DSI orientée client ?",
+                    options: [
+                      "A. Améliorer la satisfaction client et la qualité de service",
+                      "B. Réduire le nombre de clients",
+                      "C. Supprimer les projets digitaux",
+                      "D. Augmenter les coûts"
+                    ],
+                    correctAnswer: "A. Améliorer la satisfaction client et la qualité de service",
+                    explanation: "Une DSI orientée client aligne ses projets sur la valeur ajoutée perçue par les usagers finaux."
+                  },
+                  {
+                    question: "37. Que signifie IT Governance ?",
+                    options: [
+                      "A. Un contrôle des budgets uniquement",
+                      "B. Un ensemble de règles et pratiques pour aligner IT et objectifs métier",
+                      "C. Une norme marketing",
+                      "D. Une certification RH"
+                    ],
+                    correctAnswer: "B. Un ensemble de règles et pratiques pour aligner IT et objectifs métier",
+                    explanation: "La gouvernance IT permet de s’assurer que l’IT contribue efficacement à la stratégie de l’entreprise."
+                  },
+                  {
+                    question: "38. Quelle est la valeur d’un Data Lake dans une DSI ?",
+                    options: [
+                      "A. Stocker de grandes quantités de données structurées et non structurées",
+                      "B. Remplacer un ERP",
+                      "C. Supprimer la cybersécurité",
+                      "D. Réduire le cloud"
+                    ],
+                    correctAnswer: "A. Stocker de grandes quantités de données structurées et non structurées",
+                    explanation: "Un Data Lake centralise toutes les données et facilite leur analyse avancée (IA, big data)."
+                  },
+                  {
+                    question: "39. Pourquoi une stratégie ‘Open Source First’ est-elle utile en Afrique ?",
+                    options: [
+                      "A. Parce que c’est plus cher",
+                      "B. Parce qu’elle favorise l’indépendance, la personnalisation et réduit les coûts",
+                      "C. Parce qu’elle limite l’innovation",
+                      "D. Parce qu’elle supprime la cybersécurité"
+                    ],
+                    correctAnswer: "B. Parce qu’elle favorise l’indépendance, la personnalisation et réduit les coûts",
+                    explanation: "L’open source permet d’adapter les solutions localement tout en réduisant les coûts d’acquisition."
+                  },
+                  {
+                    question: "40. Qu’est-ce qu’un SLA (Service Level Agreement) ?",
+                    options: [
+                      "A. Un contrat définissant le niveau de service attendu",
+                      "B. Une base de données",
+                      "C. Une certification ISO",
+                      "D. Un plan de sauvegarde"
+                    ],
+                    correctAnswer: "A. Un contrat définissant le niveau de service attendu",
+                    explanation: "Un SLA précise les engagements de disponibilité et de qualité entre la DSI et ses clients internes."
+                  },
+                  {
+                    question: "41. Pourquoi une DSI doit-elle penser à l’interopérabilité ?",
+                    options: [
+                      "A. Pour que les systèmes communiquent efficacement",
+                      "B. Pour dépenser plus",
+                      "C. Pour éviter les normes",
+                      "D. Pour supprimer les API"
+                    ],
+                    correctAnswer: "A. Pour que les systèmes communiquent efficacement",
+                    explanation: "L’interopérabilité garantit que les systèmes hétérogènes fonctionnent ensemble sans friction."
+                  },
+                  {
+                    question: "42. Quel est l’avantage du DevOps pour une DSI ?",
+                    options: [
+                      "A. Ralentir les projets",
+                      "B. Accélérer les livraisons et améliorer la collaboration",
+                      "C. Supprimer les tests",
+                      "D. Réduire la cybersécurité"
+                    ],
+                    correctAnswer: "B. Accélérer les livraisons et améliorer la collaboration",
+                    explanation: "Le DevOps permet de livrer plus vite et plus sûr grâce à une meilleure collaboration entre dev et ops."
+                  },
+                  {
+                    question: "43. Pourquoi la conformité réglementaire est-elle critique dans une DSI d’eau et électricité ?",
+                    options: [
+                      "A. Parce qu’elle évite les sanctions légales",
+                      "B. Parce qu’elle bloque l’innovation",
+                      "C. Parce qu’elle réduit les clients",
+                      "D. Parce qu’elle supprime les audits"
+                    ],
+                    correctAnswer: "A. Parce qu’elle évite les sanctions légales",
+                    explanation: "Respecter les réglementations locales et internationales protège l’entreprise contre sanctions et litiges."
+                  },
+                  {
+                    question: "44. Quelle est la valeur d’un SOC (Security Operations Center) ?",
+                    options: [
+                      "A. Surveiller en temps réel les menaces et incidents",
+                      "B. Remplacer le cloud",
+                      "C. Décorer l’infrastructure",
+                      "D. Réduire le budget IT"
+                    ],
+                    correctAnswer: "A. Surveiller en temps réel les menaces et incidents",
+                    explanation: "Un SOC centralise la surveillance et la réponse aux incidents pour renforcer la cybersécurité."
+                  },
+                  {
+                    question: "45. Quelle est la place de l’IA dans la stratégie IT d’une DSI ?",
+                    options: [
+                      "A. Améliorer la maintenance prédictive, la relation client et la détection de fraudes",
+                      "B. Remplacer tout le personnel",
+                      "C. Supprimer les ERP",
+                      "D. Réduire la sécurité"
+                    ],
+                    correctAnswer: "A. Améliorer la maintenance prédictive, la relation client et la détection de fraudes",
+                    explanation: "L’IA aide à anticiper les pannes, optimiser les réseaux et améliorer l’expérience client."
+                  },
+                  {
+                    question: "46. Quel est l’impact de la transformation digitale sur les métiers de l’eau et électricité ?",
+                    options: [
+                      "A. Automatiser les processus, améliorer la facturation et la satisfaction client",
+                      "B. Supprimer les clients",
+                      "C. Réduire la cybersécurité",
+                      "D. Décorer l’IT"
+                    ],
+                    correctAnswer: "A. Automatiser les processus, améliorer la facturation et la satisfaction client",
+                    explanation: "La transformation digitale améliore l’efficacité, réduit les coûts et augmente la qualité de service."
+                  },
+                  {
+                    question: "47. Pourquoi un DSI doit-il collaborer avec la direction financière ?",
+                    options: [
+                      "A. Pour aligner investissements IT et retour sur investissement",
+                      "B. Pour éviter les contrôles",
+                      "C. Pour réduire les salaires",
+                      "D. Pour supprimer les budgets"
+                    ],
+                    correctAnswer: "A. Pour aligner investissements IT et retour sur investissement",
+                    explanation: "La collaboration garantit que les projets IT sont soutenables financièrement et stratégiques."
+                  },
+                  {
+                    question: "48. Quel est l’intérêt d’un tableau de bord cybersécurité ?",
+                    options: [
+                      "A. Visualiser les incidents, risques et niveaux de conformité",
+                      "B. Décorer la stratégie",
+                      "C. Supprimer les audits",
+                      "D. Réduire les budgets"
+                    ],
+                    correctAnswer: "A. Visualiser les incidents, risques et niveaux de conformité",
+                    explanation: "Un tableau de bord cybersécurité aide à prioriser les actions et à communiquer avec la direction."
+                  },
+                  {
+                    question: "49. Pourquoi la gestion du changement est-elle critique dans une DSI ?",
+                    options: [
+                      "A. Pour accompagner les utilisateurs et réduire les résistances",
+                      "B. Pour accélérer les pannes",
+                      "C. Pour supprimer les projets",
+                      "D. Pour décorer la stratégie"
+                    ],
+                    correctAnswer: "A. Pour accompagner les utilisateurs et réduire les résistances",
+                    explanation: "La gestion du changement garantit l’adoption des nouvelles solutions IT par les équipes."
+                  },
+                  {
+                    question: "50. Quel est le rôle ultime d’une DSI stratégique ?",
+                    options: [
+                      "A. Être un partenaire stratégique au service de la performance et de l’innovation",
+                      "B. Installer uniquement des serveurs",
+                      "C. Réduire le nombre de clients",
+                      "D. Supprimer la cybersécurité"
+                    ],
+                    correctAnswer: "A. Être un partenaire stratégique au service de la performance et de l’innovation",
+                    explanation: "Une DSI moderne ne se limite pas à l’infrastructure : elle est moteur de transformation et de compétitivité."
+                  }
+            ],
+        };
+
+        const questionCounterEl = document.getElementById('question-counter');
+        const currentScoreEl = document.getElementById('current-score');
+        const progressBarEl = document.getElementById('progress-bar');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainerEl = document.getElementById('options-container');
+        const explanationBoxEl = document.getElementById('explanation-box');
+        const explanationTitleEl = document.getElementById('explanation-title');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const finishBtn = document.getElementById('finish-btn');
+        const resultsModal = new bootstrap.Modal(document.getElementById('resultsModal'));
+        const finalScorePercentageEl = document.getElementById('final-score-percentage');
+        const finalScoreCorrectEl = document.getElementById('final-score-correct');
+        const finalScoreTotalEl = document.getElementById('final-score-total');
+        const finalRecommendationsEl = document.getElementById('final-recommendations');
+        const restartQuizBtn = document.getElementById('restart-quiz-btn');
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = new Array(quizData.questions.length).fill(null);
+
+        function updateProgress() {
+            questionCounterEl.textContent = `Question ${currentQuestionIndex + 1} / ${quizData.questions.length}`;
+            currentScoreEl.textContent = `Score: ${score}`;
+            const progress = ((currentQuestionIndex + 1) / quizData.questions.length) * 100;
+            progressBarEl.style.width = `${progress}%`;
+            progressBarEl.setAttribute('aria-valuenow', progress);
+        }
+
+        function displayQuestion() {
+            updateProgress();
+            
+            const currentQuestion = quizData.questions[currentQuestionIndex];
+            questionTextEl.textContent = currentQuestion.question;
+            optionsContainerEl.innerHTML = '';
+            explanationBoxEl.classList.add('d-none');
+
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.classList.add('option-btn', 'btn', 'btn-light');
+                button.textContent = option;
+                button.dataset.optionIndex = index;
+                optionsContainerEl.appendChild(button);
+
+                button.addEventListener('click', () => {
+                    handleAnswerSelection(button);
+                });
+            });
+
+            // Restore previous user answer if available
+            if (userAnswers[currentQuestionIndex] !== null) {
+                const selectedButton = optionsContainerEl.querySelector(`[data-option-index="${userAnswers[currentQuestionIndex]}"]`);
+                if (selectedButton) {
+                    handleAnswerSelection(selectedButton, true);
+                }
+            }
+            updateNavigationButtons();
+        }
+
+        function handleAnswerSelection(selectedButton, isRestoring = false) {
+            const currentQuestion = quizData.questions[currentQuestionIndex];
+            const allOptions = optionsContainerEl.querySelectorAll('.option-btn');
+            
+            // Check if an answer has already been submitted for this question
+            const isAnswered = userAnswers[currentQuestionIndex] !== null;
+
+            if (isAnswered && !isRestoring) {
+                return;
+            }
+
+            allOptions.forEach(button => {
+                button.disabled = true;
+                if (button.textContent === currentQuestion.correctAnswer) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedButton.textContent === currentQuestion.correctAnswer) {
+                if (userAnswers[currentQuestionIndex] === null) {
+                    score++;
+                    userAnswers[currentQuestionIndex] = parseInt(selectedButton.dataset.optionIndex);
+                }
+                explanationBoxEl.classList.remove('d-none', 'explanation-incorrect');
+                explanationBoxEl.classList.add('explanation-correct');
+                explanationTitleEl.innerHTML = '<i class="fas fa-check-circle text-success"></i> Bonne réponse !';
+            } else {
+                selectedButton.classList.add('incorrect');
+                if (userAnswers[currentQuestionIndex] === null) {
+                    userAnswers[currentQuestionIndex] = parseInt(selectedButton.dataset.optionIndex);
+                }
+                explanationBoxEl.classList.remove('d-none', 'explanation-correct');
+                explanationBoxEl.classList.add('explanation-incorrect');
+                explanationTitleEl.innerHTML = '<i class="fas fa-times-circle text-danger"></i> Mauvaise réponse';
+            }
+
+            explanationTextEl.textContent = currentQuestion.explanation;
+            updateProgress();
+        }
+
+        function updateNavigationButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            if (currentQuestionIndex === quizData.questions.length - 1) {
+                nextBtn.classList.add('d-none');
+                finishBtn.classList.remove('d-none');
+            } else {
+                nextBtn.classList.remove('d-none');
+                finishBtn.classList.add('d-none');
+            }
+        }
+
+        function handleNext() {
+            if (currentQuestionIndex < quizData.questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+
+        function handlePrev() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        function showFinalResults() {
+            const questions = quizData.questions;
+            const percentage = (score / questions.length) * 100;
+            let scoreColor;
+            let recommendationsHtml;
+
+            if (percentage >= 80) {
+                scoreColor = 'var(--success-color)';
+                recommendationsHtml = '<h5><i class="fas fa-star text-warning"></i> Excellent !</h5><p>Vous maîtrisez la stratégie IT d’une DSI. Continuez sur cette lancée !</p>';
+            } else if (percentage >= 50) {
+                scoreColor = 'var(--agile-blue)';
+                recommendationsHtml = '<h5><i class="fas fa-chart-line text-info"></i> Pas mal !</h4><p>Vous avez de bonnes bases, mais quelques points méritent d\'être approfondis. N\'hésitez pas à revoir les explications.</p>';
+            } else {
+                scoreColor = 'var(--danger-color)';
+                recommendationsHtml = '<h5><i class="fas fa-book-open text-secondary"></i> Encore un effort !</h4><p>C\'est un bon début. Nous vous encourageons à revoir les principes fondamentaux pour consolider vos connaissances.</p>';
+            }
+
+            finalScoreCorrectEl.textContent = score;
+            finalScoreTotalEl.textContent = questions.length;
+            finalScorePercentageEl.textContent = `${percentage.toFixed(0)}%`;
+            finalScorePercentageEl.style.color = scoreColor;
+            finalRecommendationsEl.innerHTML = recommendationsHtml;
+
+            resultsModal.show();
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = new Array(quizData.questions.length).fill(null);
+            displayQuestion();
+        }
+
+        // Event Listeners
+        nextBtn.addEventListener('click', handleNext);
+        prevBtn.addEventListener('click', handlePrev);
+        finishBtn.addEventListener('click', showFinalResults);
+        restartQuizBtn.addEventListener('click', () => {
+            resultsModal.hide();
+            // A short delay to allow modal to close before restarting
+            setTimeout(startQuiz, 500);
+        });
+        
+        // Initial call
+        document.addEventListener('DOMContentLoaded', startQuiz);
+    </script>
+</body>
+</html>
